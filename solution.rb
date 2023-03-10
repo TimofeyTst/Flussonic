@@ -1,6 +1,8 @@
 require 'date'
 require 'time'
 
+# Реализуем функцию добавления, которая будет проверять валидность 
+
 class Solution
     def initialize(periods, start_date)
         @periods = periods
@@ -32,10 +34,10 @@ class Solution
     end
 
     # Формирует диапазон дат от начальной, пока они валидны
-    def get_periods_range 
+    def get_periods_range(periods) 
         current_range = @start_date..@start_date
 
-        @periods.take_while do |period|
+        periods.take_while do |period|
             next_range = get_date_range(period) # Парсим очередной период в диапазон дат
 
             if ranges_continue?(current_range, next_range[0])
@@ -55,14 +57,16 @@ class Solution
                     current_range = current_range.first..current_range.last.next_year
                 end
             else
+                # puts "False Current range - next_range", current_range, next_range
                 current_range = nil
             end
         end
         current_range
     end
 
-    def valid?
-        !get_periods_range.nil?
+    def valid?(periods = @periods)
+        # puts get_periods_range unless get_periods_range.nil?
+        !get_periods_range(periods).nil?
     end
 end
 
@@ -93,7 +97,8 @@ def Testfunc
     puts sl.valid?
     sl = Solution.new(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D29"], Date.new(2020,1,30))#false
     puts sl.valid?
-
+    puts "--------------"
+    puts sl.valid?(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D30", "2024M3D31"])
 end
 
 Testfunc()
