@@ -7,15 +7,13 @@ class Solution
         @start_date = start_date
     end
 
-
+    # Проверка возможности образовать из двух диапазонов новый
     def ranges_continue?(range1, range2)
-        # puts range1, range2
-        # p range2
-        # (range1.first <= range2.first) && (range1.last < range2.last)
         (range2.first <= range1.last) && (range1.last < range2.last)
     end
 
-
+    # Создает из строкового периода период в виде диапазона дат,
+    # и возвращает вместе с типом (год, месяц или день)
     def get_date_range(date)
         if date.match?(/^\d{4}M([1-9]|1[0-2])D\d{1,2}$/)
             st_range = Date.new(date[0..3].to_i, date[date.index("M")+1..].to_i, date[date.index("D")+1..].to_i)
@@ -33,15 +31,18 @@ class Solution
         [st_range..end_range, type]
     end
 
-
+    # Формирует диапазон дат от начальной, пока они валидны
     def get_periods_range 
         current_range = @start_date..@start_date
+
         @periods.take_while do |period|
-            next_range = get_date_range(period)
+            next_range = get_date_range(period) # Парсим очередной период в диапазон дат
+
             if ranges_continue?(current_range, next_range[0])
                 case next_range[1]
                 when "yymmdd"
                     current_range = current_range.first..current_range.last + 1
+
                 when "yymm"
                     if current_range.last.month == 2
                         end_range = Date.new(current_range.last.year, current_range.last.month + 1, @start_date.day)
@@ -49,11 +50,11 @@ class Solution
                         end_range = current_range.last.next_month
                     end
                     current_range = current_range.first..end_range
+
                 when "yy"
                     current_range = current_range.first..current_range.last.next_year
                 end
             else
-                # puts "False Current range - next_range", current_range, next_range
                 current_range = nil
             end
         end
@@ -61,7 +62,6 @@ class Solution
     end
 
     def valid?
-        # puts get_periods_range
         !get_periods_range.nil?
     end
 end
@@ -94,39 +94,6 @@ def Testfunc
     sl = Solution.new(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D29"], Date.new(2020,1,30))#false
     puts sl.valid?
 
-#     04.06.1976		true
-# 02.05.2023	["2023M5D2", "2023M5D3", "2023M5D5"]	false
-
-# 30.01.2023	["2023M1", "2023M2", "2023M3D30"]	true
-# 31.01.2023	["2023M1", "2023M2", "2023M3D30"]	false
-
-# 30.01.2020	["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D30"]	true
-# 30.01.2020	["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D29"]	
-
-
-    # puts sl.get_date_range("2022")
-    # puts sl.ranges_continue?(Date.new(2022,1,30)..Date.new(2022,1,30), sl.get_date_range("2022")[0])
-    # puts ranges_continue?(get_date_range("2022M1"), get_date_range("2022M1D31"))
-    # puts [get_date_range("2022M1"), get_date_range("2022M1D31")]
-    # puts get_date_range("2022M2")
-    # puts get_date_range("2022")
-    # puts get_date_range(periods[0])
-    # puts get_date_range(periods[1])
-    # puts get_date_range(periods[3])
-    puts "-------------"
-    # puts ranges_overlap?(get_date_range(periods[0]), get_date_range(periods[1]))
-    # ranges = periods.map{ |el| get_date_range el }
-    # res = []
-    # ranges.each_with_index do |range, i|
-    #     if i > 0
-    #         puts ranges[i-1]
-    #         puts range
-    #         cur = ranges_overlap?(ranges[i-1], range)
-    #         puts cur
-    #         res << cur
-    #     end
-    # end
-    # puts res
 end
 
 Testfunc()
