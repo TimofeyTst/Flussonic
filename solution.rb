@@ -12,7 +12,7 @@ class Solution
         # puts range1, range2
         # p range2
         # (range1.first <= range2.first) && (range1.last < range2.last)
-        (range2.first <= range1.last) && (range1.last <= range2.last)
+        (range2.first <= range1.last) && (range1.last < range2.last)
     end
 
 
@@ -23,11 +23,11 @@ class Solution
             type = "yymmdd"
         elsif date.match?(/^\d{4}M([1-9]|1[0-2])$/)
             st_range = Date.new(date[0..3].to_i, date[date.index("M")+1..].to_i)
-            end_range = st_range.next_month - 1
+            end_range = st_range.next_month
             type = "yymm"
         elsif date.match?(/^\d{4}$/)
             st_range = Date.new(date[0..3].to_i)
-            end_range = st_range.next_year - 1
+            end_range = st_range.next_year
             type = "yy"
         end
         [st_range..end_range, type]
@@ -53,7 +53,7 @@ class Solution
                     current_range = current_range.first..current_range.last.next_year
                 end
             else
-                puts "False Current range - next_range", current_range, next_range
+                # puts "False Current range - next_range", current_range, next_range
                 current_range = nil
             end
         end
@@ -61,7 +61,7 @@ class Solution
     end
 
     def valid?
-        puts get_periods_range
+        # puts get_periods_range
         !get_periods_range.nil?
     end
 end
@@ -72,27 +72,27 @@ end
 
 
 def Testfunc
-    # sl = Solution.new(["2023", "2024", "2025"], Date.new(2023,7,16))#true
-    # puts sl.valid?
-    # sl = Solution.new(["2023", "2025", "2026"], Date.new(2023,4,24))#false
-    # puts sl.valid?
-    # sl = Solution.new(["2023M1", "2023M2", "2023M3"], Date.new(2023,1,31))#true
-    # puts sl.valid?
-    # sl = Solution.new(["2023M1", "2023M3", "2023M4"], Date.new(2023,1,10))#false
-    # puts sl.valid?
+    sl = Solution.new(["2023", "2024", "2025"], Date.new(2023,7,16))#true
+    puts sl.valid?
+    sl = Solution.new(["2023", "2025", "2026"], Date.new(2023,4,24))#false
+    puts sl.valid?
+    sl = Solution.new(["2023M1", "2023M2", "2023M3"], Date.new(2023,1,31))#true
+    puts sl.valid?
+    sl = Solution.new(["2023M1", "2023M3", "2023M4"], Date.new(2023,1,10))#false
+    puts sl.valid?
 
-    # sl = Solution.new(["1976M6D4", "1976M6D5", "1976M6D6"], Date.new(1976,6,4)) #true
-    # puts sl.valid?
-    # sl = Solution.new(["2023M5D2", "2023M5D3", "2023M5D5"], Date.new(2023,5,2)) #false
-    # puts sl.valid?
+    sl = Solution.new(["1976M6D4", "1976M6D5", "1976M6D6"], Date.new(1976,6,4)) #true
+    puts sl.valid?
+    sl = Solution.new(["2023M5D2", "2023M5D3", "2023M5D5"], Date.new(2023,5,2)) #false
+    puts sl.valid?
     sl = Solution.new(["2023M1", "2023M2", "2023M3D30"], Date.new(2023,1,30)) #true
     puts sl.valid?
     sl = Solution.new(["2023M1", "2023M2", "2023M3D30"], Date.new(2023,1,31)) #false
     puts sl.valid?
-    # sl = Solution.new(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D30"], Date.new(2020,1,30))#true
-    # puts sl.valid?
-    # sl = Solution.new(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D29"], Date.new(2020,1,30))#false
-    # puts sl.valid?
+    sl = Solution.new(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D30"], Date.new(2020,1,30))#true
+    puts sl.valid?
+    sl = Solution.new(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D29"], Date.new(2020,1,30))#false
+    puts sl.valid?
 
 #     04.06.1976		true
 # 02.05.2023	["2023M5D2", "2023M5D3", "2023M5D5"]	false
