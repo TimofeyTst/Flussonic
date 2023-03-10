@@ -1,18 +1,20 @@
 require 'date'
-require 'time'
-
-# Реализуем функцию добавления, которая будет проверять валидность 
 
 class Solution
+    attr_accessor :periods
+
+
     def initialize(periods, start_date)
         @periods = periods
         @start_date = start_date
     end
 
+
     # Проверка возможности образовать из двух диапазонов новый
     def ranges_continue?(range1, range2)
         (range2.first <= range1.last) && (range1.last < range2.last)
     end
+
 
     # Создает из строкового периода период в виде диапазона дат,
     # и возвращает вместе с типом (год, месяц или день)
@@ -32,6 +34,7 @@ class Solution
         end
         [st_range..end_range, type]
     end
+
 
     # Формирует диапазон дат от начальной, пока они валидны
     def get_periods_range(periods) 
@@ -57,48 +60,22 @@ class Solution
                     current_range = current_range.first..current_range.last.next_year
                 end
             else
-                # puts "False Current range - next_range", current_range, next_range
                 current_range = nil
             end
         end
         current_range
     end
 
+
     def valid?(periods = @periods)
-        # puts get_periods_range unless get_periods_range.nil?
         !get_periods_range(periods).nil?
+    end
+
+    
+    def add period
+        if valid?(@periods + [period])
+            @periods += [period]
+        end
     end
 end
 
-
-
-
-
-
-def Testfunc
-    sl = Solution.new(["2023", "2024", "2025"], Date.new(2023,7,16))#true
-    puts sl.valid?
-    sl = Solution.new(["2023", "2025", "2026"], Date.new(2023,4,24))#false
-    puts sl.valid?
-    sl = Solution.new(["2023M1", "2023M2", "2023M3"], Date.new(2023,1,31))#true
-    puts sl.valid?
-    sl = Solution.new(["2023M1", "2023M3", "2023M4"], Date.new(2023,1,10))#false
-    puts sl.valid?
-
-    sl = Solution.new(["1976M6D4", "1976M6D5", "1976M6D6"], Date.new(1976,6,4)) #true
-    puts sl.valid?
-    sl = Solution.new(["2023M5D2", "2023M5D3", "2023M5D5"], Date.new(2023,5,2)) #false
-    puts sl.valid?
-    sl = Solution.new(["2023M1", "2023M2", "2023M3D30"], Date.new(2023,1,30)) #true
-    puts sl.valid?
-    sl = Solution.new(["2023M1", "2023M2", "2023M3D30"], Date.new(2023,1,31)) #false
-    puts sl.valid?
-    sl = Solution.new(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D30"], Date.new(2020,1,30))#true
-    puts sl.valid?
-    sl = Solution.new(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D29"], Date.new(2020,1,30))#false
-    puts sl.valid?
-    puts "--------------"
-    puts sl.valid?(["2020M1", "2020", "2021", "2022", "2023", "2024M2", "2024M3D30", "2024M3D31"])
-end
-
-Testfunc()
